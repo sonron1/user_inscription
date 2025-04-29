@@ -1,25 +1,39 @@
-
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
+# Symfony
 /var/
 /vendor/
-###< symfony/framework-bundle ###
+/node_modules/
 
-###> phpunit/phpunit ###
+# Environnement local
+.env.local
+.env.*.local
+.env.test
+.env.test.local
+
+# Secrets Symfony (ne pas versionner les fichiers .local.php)
+config/secrets/*/*.local.php
+
+# Clés privées (JWT, SSH, etc.)
+*.pem
+*.key
+jwt*
+
+# Fichiers temporaires
+*.log
+*.lock
+*.cache
+
+# Dossiers spécifiques aux IDE
+.idea/
+.vscode/
+
+# Fichiers de swap / système
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# PHPUnit
 /phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+/phpunit.xml.dist
 
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
+# Build front-end (si

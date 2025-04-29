@@ -36,4 +36,9 @@ Thumbs.db
 /phpunit.xml
 /phpunit.xml.dist
 
-# Build front-end (si
+# Build front-end (si applicable)
+public/build/
+public/bundles/
+
+# Autres
+composer.phar

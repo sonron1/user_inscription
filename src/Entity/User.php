@@ -4,137 +4,163 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column(type: 'integer')]
+  private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+  #[ORM\Column(type: 'string', length: 180, unique: true)]
+  #[Assert\NotBlank]
+  #[Assert\Email]
+  private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
+  #[ORM\Column(type: 'json')]
+  private array $roles = [];
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+  #[ORM\Column(type: 'string')]
+  #[Assert\NotBlank]
+  private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+  #[ORM\Column(type: 'string', length: 100)]
+  private ?string $nom = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+  #[ORM\Column(type: 'string', length: 100)]
+  private ?string $prenom = null;
 
-    #[ORM\Column]
-    private ?bool $isVerified = null;
+  #[ORM\Column(type: 'boolean')]
+  private bool $isVerified = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $token = null;
+  #[ORM\Column(type: 'string', nullable: true)]
+  private ?string $token = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $dateInscription = null;
+  #[ORM\Column(type: 'datetime_immutable')]
+  private \DateTimeImmutable $dateInscription;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+  public function __construct()
+  {
+    $this->dateInscription = new \DateTimeImmutable();
+  }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
+  public function getEmail(): ?string
+  {
+    return $this->email;
+  }
 
-        return $this;
-    }
+  public function setEmail(string $email): self
+  {
+    $this->email = $email;
 
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
+    return $this;
+  }
 
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
+  public function getUserIdentifier(): string
+  {
+    return $this->email;
+  }
 
-        return $this;
-    }
+  public function getRoles(): array
+  {
+    $roles = $this->roles;
+    // Garantir qu'un utilisateur ait toujours au moins ce rôle
+    $roles[] = 'ROLE_USER';
 
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
+    return array_unique($roles);
+  }
 
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
+  public function setRoles(array $roles): self
+  {
+    $this->roles = $roles;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
+  public function getPassword(): string
+  {
+    return $this->password;
+  }
 
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
+  public function setPassword(string $password): self
+  {
+    $this->password = $password;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
+  public function getNom(): ?string
+  {
+    return $this->nom;
+  }
 
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
+  public function setNom(string $nom): self
+  {
+    $this->nom = $nom;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function isVerified(): ?bool
-    {
-        return $this->isVerified;
-    }
+  public function getPrenom(): ?string
+  {
+    return $this->prenom;
+  }
 
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
+  public function setPrenom(string $prenom): self
+  {
+    $this->prenom = $prenom;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
+  public function isVerified(): bool
+  {
+    return $this->isVerified;
+  }
 
-    public function setToken(?string $token): static
-    {
-        $this->token = $token;
+  public function setIsVerified(bool $isVerified): self
+  {
+    $this->isVerified = $isVerified;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getDateInscription(): ?\DateTimeImmutable
-    {
-        return $this->dateInscription;
-    }
+  public function getToken(): ?string
+  {
+    return $this->token;
+  }
 
-    public function setDateInscription(\DateTimeImmutable $dateInscription): static
-    {
-        $this->dateInscription = $dateInscription;
+  public function setToken(?string $token): self
+  {
+    $this->token = $token;
 
-        return $this;
-    }
+    return $this;
+  }
+
+  public function getDateInscription(): \DateTimeImmutable
+  {
+    return $this->dateInscription;
+  }
+
+  public function setDateInscription(\DateTimeImmutable $date): self
+  {
+    $this->dateInscription = $date;
+
+    return $this;
+  }
+
+  // Méthodes imposées par les interfaces
+  public function eraseCredentials(): void
+  {
+    // Efface les données sensibles ici (ex: mot de passe en clair)
+  }
 }

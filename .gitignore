@@ -1,44 +1,63 @@
-# Symfony
+
+###> symfony/framework-bundle ###
+# Fichier/Dossiers Symfony à ignorer.
+/.env.local
+/.env.local.php
+/.env.*.local
+.env.test
+.env.test.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
 /var/
 /vendor/
 /node_modules/
+###< symfony/framework-bundle ###
 
-# Environnement local
-.env.local
-.env.*.local
-.env.test
-.env.test.local
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
 
-# Secrets Symfony (ne pas versionner les fichiers .local.php)
-config/secrets/*/*.local.php
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
 
-# Clés privées (JWT, SSH, etc.)
-*.pem
-*.key
-jwt*
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
 
-# Fichiers temporaires
-*.log
-*.lock
-*.cache
+# Cache & logs
+/var/cache/
+/var/log/
+/var/sessions/
 
-# Dossiers spécifiques aux IDE
+# Fichiers d'environnement
+/.env.local
+/.env.*.local
+
+# Fichiers de configuration sensibles
+/config/secrets/*.local.php
+
+# Clés SSL ou autres fichiers sensibles
+/private.key
+/public.key
+/jwt.pem
+/jwt.key
+
+# IDE & OS files
 .idea/
 .vscode/
-
-# Fichiers de swap / système
 *.swp
 *.swo
 .DS_Store
 Thumbs.db
 
-# PHPUnit
+# Tests
 /phpunit.xml
 /phpunit.xml.dist
 
-# Build front-end (si applicable)
-public/build/
-public/bundles/
-
-# Autres
-composer.phar
+# Autres fichiers temporaires
+*.log
+*.lock
